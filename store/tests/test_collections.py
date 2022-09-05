@@ -42,13 +42,14 @@ class PublicCollectionTests(GraphQLTestCase):
 
         resp = self.query(
             COLLECTION_QUERY,
-            op_name='collection',
+            op_name='collections',
             variables={'id': float(collection.id)}
         )
         content = json.loads(resp.content)
+        print(content)
 
         self.assertResponseNoErrors(resp)
-        self.assertEqual(len(content['data']['collection']['edges']), 1)
+        self.assertEqual(len(content['data']['collections']['edges']), 1)
 
 
 class PrivateCollectionTests(GraphQLTestCase):
@@ -69,6 +70,9 @@ class PrivateCollectionTests(GraphQLTestCase):
             variables={'title': 'Test collection', 'featuredProductId': product.id}
         )
         content = json.loads(resp.content)
+
+        print(content)
+
 
         self.assertResponseNoErrors(resp)
         self.assertIsNotNone(content['data']['createCollection']['collection'])

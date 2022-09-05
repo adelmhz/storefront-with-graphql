@@ -1,7 +1,7 @@
 COLLECTION_QUERY =  \
 '''
 query collections($id: Float){
-    collection(id: $id) {
+    collections(id: $id) {
         edges {
             node {
             id
@@ -16,7 +16,7 @@ CREATE_COLLECTION_MUTATION = \
 '''
 mutation createCollection($title: String!, $featuredProductId: ID){
   createCollection(title: $title, featuredProductId: $featuredProductId) {
- 		collections {
+ 		collection {
             id
             title
             featuredProduct {
