@@ -13,3 +13,27 @@ class ProductFilter(FilterSet):
                 ('unit_price', 'last_update', 'title')
             )
         )
+
+class ReviewFilter(FilterSet):
+    class Meta:
+        model = Review
+        fields = {
+            'date': ['gt', 'lt']
+        }
+        order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+
+class PromotionFilter(FilterSet):
+    class Meta:
+        model = Promotion
+        fields = {
+            'description': ['icontains'],
+        }
+        order_by = OrderingFilter(
+            fields=(
+                ('discount'),
+            )
+        )

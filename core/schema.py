@@ -1,12 +1,13 @@
 import graphene
 import graphql_jwt
 from graphene_django.debug import DjangoDebug
-from store.schema import (
-    CollectionQuery, CollectionMutation, ProductQuery,
-    ProductMutation)
+from store.schema import (CollectionQuery, ProductQuery, ReviewQuery,
+                          CartQuery, CollectionMutation, ProductMutation,
+                          PromotionQuery, UserQuery)
 
 
-class Query(CollectionQuery, ProductQuery):
+class Query(CollectionQuery, ProductQuery, ReviewQuery,
+        PromotionQuery, CartQuery, UserQuery):
     debug = graphene.Field(DjangoDebug, name='_debug')
 
 

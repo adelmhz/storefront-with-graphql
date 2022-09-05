@@ -221,3 +221,41 @@ class ProductMutation(graphene.ObjectType):
     edit_product = EditProduct.Field()
     delete_product_promotions = DeleteProductPromotions.Field()
     delete_product = DeleteProduct.Field()
+
+
+class PromotionQuery(graphene.ObjectType):
+    promotion = graphene.Field(
+        PromotionType, promotion_id=graphene.ID(required=True))
+    all_promotions = DjangoFilterConnectionField(
+        PromotionType, filterset_class=PromotionFilter
+    )
+
+    @staff_member_required
+    def resolve_promotion(root, info, promotion_id):
+        try:
+            return Promotion.objects.get(pk=promotion_id)
+        except Promotion.DoesNotExist:
+            return None
+
+
+class ReviewQuery(graphene.ObjectType):
+    reviews_of_product = DjangoFilterConnectionField(
+        ReviewType, filterset_class=ReviewFilter, product_id=graphene.ID(required=True))
+    review = graphene.Field(ReviewType, review_id=graphene.ID(required=True))
+
+    def resolve_reviews_of_product(root, info, product_id):
+        return Review.objects.filter(product_id=product_id)
+
+    def resolve_review(root, info, review_id):
+        try:
+            return Review.objects.get(pk=review_id)
+        except Review.DoesNotExist:
+            return None
+
+
+class CartQuery(graphene.ObjectType):
+    cart = graphene.Field(CartType, cart_id=graphene.ID(required=True))
+
+    @login_required
+    def resolve_cart(root, info, cart_id):
+        return Cart.objects.get(pk=cart_id)
