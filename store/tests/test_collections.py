@@ -3,36 +3,8 @@ from django.contrib.auth import get_user_model
 from graphene_django.utils.testing import GraphQLTestCase
 from store.models import Collection, Product
 from decimal import Decimal
+from .queries import *
 
-COLLECTION_QUERY =  \
-'''
-query collections($id: Float){
-    collection(id: $id) {
-        edges {
-            node {
-            id
-            title
-            }
-        }
-    }
-}
-'''
-
-CREATE_COLLECTION_MUTATION = \
-'''
-mutation createCollection($title: String!, $featuredProductId: ID){
-  createCollection(title: $title, featuredProductId: $featuredProductId) {
- 		collections {
-            id
-            title
-            featuredProduct {
-                title
-                unitPrice
-            }
-        }
-    }
-}
-'''
 
 def create_user(username='test_user', password='test_user1234', is_staff=True):
     return get_user_model().objects.create(
