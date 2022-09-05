@@ -3,8 +3,17 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphql_jwt.decorators import staff_member_required, login_required
 from django.db import transaction
 from .models import Product, Collection, Review, Cart, Promotion
-from .types import CollectionType, ProductType
-from .filters import ProductFilter
+from .filters import ProductFilter, ReviewFilter, PromotionFilter
+from .types import (CollectionType, ProductType, ReviewType,
+            CartType, PromotionType, UserType)
+
+
+class UserQuery(graphene.ObjectType):
+    me = graphene.Field(UserType)
+
+    @login_required
+    def resolve_me(root, info):
+        return info.context.user
 
 
 class CollectionQuery(graphene.ObjectType):
@@ -198,7 +207,6 @@ class DeleteProductPromotions(graphene.Mutation):
         except Product.DoesNotExist:
             return DeleteProductPromotions(response="Product does not exist.")
 
-
 class DeleteProduct(graphene.Mutation):
     class Arguments:
         product_id = graphene.ID(required=True)
@@ -215,13 +223,11 @@ class DeleteProduct(graphene.Mutation):
         except Product.DoesNotExist:
             return DeleteProductPromotions(response="Product does not exist.")
 
-
 class ProductMutation(graphene.ObjectType):
     create_product = CreateProduct.Field()
     edit_product = EditProduct.Field()
     delete_product_promotions = DeleteProductPromotions.Field()
     delete_product = DeleteProduct.Field()
-
 
 class PromotionQuery(graphene.ObjectType):
     promotion = graphene.Field(
