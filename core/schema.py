@@ -1,14 +1,16 @@
 import graphene
 import graphql_jwt
 from graphene_django.debug import DjangoDebug
-from store.schema import CollectionQuery, CollectionMutation,
+from store.schema import (
+    CollectionQuery, CollectionMutation, ProductQuery,
+    ProductMutation)
 
 
-class Query(CollectionQuery):
+class Query(CollectionQuery, ProductQuery):
     debug = graphene.Field(DjangoDebug, name='_debug')
 
 
-class Mutation(CollectionMutation):
+class Mutation(CollectionMutation, ProductMutation):
     token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()

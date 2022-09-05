@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from .models import Product, Collection, Review, Cart, Promotion
 from django.contrib.auth import get_user_model
 
+
 class CollectionType(DjangoObjectType):
     class Meta:
         fields = ('id', 'title', 'products', 'featured_product')
@@ -17,3 +18,12 @@ class CollectionType(DjangoObjectType):
     def get_queryset(cls, queryset, info):
         return queryset.prefetch_related('products')
 
+
+class ProductType(DjangoObjectType):
+    class Meta:
+        model = Product
+        interfaces = (relay.Node, )
+
+    @classmethod
+    def get_queryset(cls, queryset, info):
+        return queryset.select_related('collection')
