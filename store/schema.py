@@ -5,10 +5,11 @@ from django.db import transaction
 from .models import Product, Collection, Review, Cart, Promotion
 from .filters import ProductFilter, ReviewFilter, PromotionFilter
 from .types import (CollectionType, ProductType, ReviewType,
-            CartType, PromotionType, UserType)
+                    CartType, PromotionType, UserType)
 
 
 class UserQuery(graphene.ObjectType):
+    """Query to retrieve authenticated user."""
     me = graphene.Field(UserType)
 
     @login_required
@@ -17,10 +18,12 @@ class UserQuery(graphene.ObjectType):
 
 
 class CollectionQuery(graphene.ObjectType):
-    collection = DjangoFilterConnectionField(CollectionType)
+    """Query to retrieve collections."""
+    collections = DjangoFilterConnectionField(CollectionType)
 
 
 class CreateCollection(graphene.Mutation):
+    """Mutation for creating a collection."""
     class Arguments:
         title = graphene.String(required=True)
         featured_product_id = graphene.ID()
@@ -41,6 +44,7 @@ class CreateCollection(graphene.Mutation):
 
 
 class EditCollection(graphene.Mutation):
+    """Mutation for updating a collection."""
     class Arguments:
         collection_id = graphene.ID(required=True)
         title = graphene.String(required=True)
@@ -62,6 +66,7 @@ class EditCollection(graphene.Mutation):
 
 
 class DeleteCollection(graphene.Mutation):
+    """Mutation for deleting a collection."""
     class Arguments:
         collection_id = graphene.ID(required=True)
 
@@ -77,12 +82,14 @@ class DeleteCollection(graphene.Mutation):
 
 
 class CollectionMutation(graphene.ObjectType):
+    """Mutation class for create, update and delete a collection"""
     create_collection = CreateCollection.Field()
     edit_collection = EditCollection.Field()
     delete_collection = DeleteCollection.Field()
 
 
 class ProductQuery(graphene.ObjectType):
+    """Query for get all products or retrieve a product."""
     all_products = DjangoFilterConnectionField(
         ProductType, filterset_class=ProductFilter)
     product = graphene.Field(
@@ -96,6 +103,7 @@ class ProductQuery(graphene.ObjectType):
 
 
 class CreateProduct(graphene.Mutation):
+    """Mutation for creating a product."""
     class Arguments:
         title = graphene.String(required=True)
         slug = graphene.String(required=True)
@@ -141,6 +149,7 @@ class CreateProduct(graphene.Mutation):
 
 
 class EditProduct(graphene.Mutation):
+    """Mutation for updating a product."""
     class Arguments:
         product_id = graphene.ID(required=True)
         title = graphene.String()
@@ -192,6 +201,7 @@ class EditProduct(graphene.Mutation):
 
 
 class DeleteProductPromotions(graphene.Mutation):
+    """Mutation for deleting promotions of a product."""
     class Arguments:
         product_id = graphene.ID(required=True)
 
@@ -207,7 +217,9 @@ class DeleteProductPromotions(graphene.Mutation):
         except Product.DoesNotExist:
             return DeleteProductPromotions(response="Product does not exist.")
 
+
 class DeleteProduct(graphene.Mutation):
+    """Mutation for deleting a product."""
     class Arguments:
         product_id = graphene.ID(required=True)
 
@@ -223,13 +235,17 @@ class DeleteProduct(graphene.Mutation):
         except Product.DoesNotExist:
             return DeleteProductPromotions(response="Product does not exist.")
 
+
 class ProductMutation(graphene.ObjectType):
+    """Mutating class for create, update, delete and promotions of product."""
     create_product = CreateProduct.Field()
     edit_product = EditProduct.Field()
     delete_product_promotions = DeleteProductPromotions.Field()
     delete_product = DeleteProduct.Field()
 
+
 class PromotionQuery(graphene.ObjectType):
+    """Query for retrieve promotions."""
     promotion = graphene.Field(
         PromotionType, promotion_id=graphene.ID(required=True))
     all_promotions = DjangoFilterConnectionField(
@@ -245,6 +261,7 @@ class PromotionQuery(graphene.ObjectType):
 
 
 class ReviewQuery(graphene.ObjectType):
+    """Query for retrieve review or reviews of product"""
     reviews_of_product = DjangoFilterConnectionField(
         ReviewType, filterset_class=ReviewFilter, product_id=graphene.ID(required=True))
     review = graphene.Field(ReviewType, review_id=graphene.ID(required=True))
@@ -260,6 +277,7 @@ class ReviewQuery(graphene.ObjectType):
 
 
 class CartQuery(graphene.ObjectType):
+    """Query for retrieve a cart."""
     cart = graphene.Field(CartType, cart_id=graphene.ID(required=True))
 
     @login_required
