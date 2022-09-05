@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'graphiql_debug_toolbar',
     'core',
+    'customer',
     'likes',
     'playground',
     'store',
@@ -152,7 +153,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 GRAPHENE = {
-    "SCHEMA": "core.schema.schema",
+    "SCHEMA": "graphql_api.schema.schema",
     'MIDDLEWARE': [
         'graphene_django.debug.DjangoDebugMiddleware',
         'graphql_jwt.middleware.JSONWebTokenMiddleware',

@@ -1,5 +1,5 @@
 from django_filters.rest_framework import FilterSet, OrderingFilter
-from .models import Product, Review, Promotion
+from store.models import Product, Review, Promotion
 
 class ProductFilter(FilterSet):
     class Meta:

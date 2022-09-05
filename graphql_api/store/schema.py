@@ -2,20 +2,10 @@ import graphene
 from graphene_django.filter import DjangoFilterConnectionField
 from graphql_jwt.decorators import staff_member_required, login_required
 from django.db import transaction
-from .models import Product, Collection, Review, Cart, Promotion
+from store.models import Product, Collection, Review, Cart, Promotion
 from .filters import ProductFilter, ReviewFilter, PromotionFilter
 from .types import (CollectionType, ProductType, ReviewType,
-                    CartType, PromotionType, UserType)
-
-
-class UserQuery(graphene.ObjectType):
-    """Query to retrieve authenticated user."""
-    me = graphene.Field(UserType)
-
-    @login_required
-    def resolve_me(root, info):
-        return info.context.user
-
+                    CartType, PromotionType)
 
 class CollectionQuery(graphene.ObjectType):
     """Query to retrieve collections."""

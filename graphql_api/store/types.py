@@ -1,13 +1,6 @@
 from graphene import relay
 from graphene_django import DjangoObjectType
-from .models import Product, Collection, Review, Cart, Promotion
-from django.contrib.auth import get_user_model
-
-class UserType(DjangoObjectType):
-    class Meta:
-        exclude = ('password',)
-        interfaces = (relay.Node, )
-        model = get_user_model()
+from store.models import Product, Collection, Review, Cart, Promotion
 
 class CollectionType(DjangoObjectType):
     class Meta:
