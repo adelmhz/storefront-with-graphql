@@ -101,13 +101,14 @@ class CreateProduct(graphene.Mutation):
             for attr, value in kwargs.items():
                 setattr(product, attr, value)
 
-            product.save()
-
             try:
                 collection = Collection.objects.get(pk=collection_id)
                 product.collection = collection
             except Collection.DoesNotExist:
                 raise GraphQLError('Collection dose not exist.')
+
+            product.save()
+
 
             if promotions:
                 for promotion_id in promotions:
@@ -173,7 +174,7 @@ class DeleteProductPromotions(graphene.Mutation):
     class Arguments:
         product_id = graphene.ID(required=True)
 
-    ok = graphene.String()
+    ok = graphene.Boolean()
 
     @classmethod
     @staff_member_required
@@ -181,7 +182,7 @@ class DeleteProductPromotions(graphene.Mutation):
         try:
             product = Product.objects.get(pk=product_id)
             product.promotions.clear()
-            return DeleteProductPromotions(ok="ok")
+            return DeleteProductPromotions(ok=True)
         except Product.DoesNotExist:
             raise GraphQLError("Product does not exist.")
 
@@ -191,7 +192,7 @@ class DeleteProduct(graphene.Mutation):
     class Arguments:
         product_id = graphene.ID(required=True)
 
-    ok = graphene.String()
+    ok = graphene.Boolean()
 
     @classmethod
     @staff_member_required
@@ -199,6 +200,6 @@ class DeleteProduct(graphene.Mutation):
         try:
             product = Product.objects.get(pk=product_id)
             product.delete()
-            return DeleteProductPromotions(ok="ok")
+            return DeleteProductPromotions(ok=True)
         except Product.DoesNotExist:
             raise GraphQLError("Product does not exist.")

@@ -52,3 +52,91 @@ mutation deleteCollection($collectionId: ID!) {
     }
 }
 '''
+
+ALL_PRODUCTS_QUERY = \
+'''
+query allProducts {
+   allProducts{
+    edges {
+        node {
+            id
+            title
+        }
+    }
+   }
+}
+'''
+
+PRODUCT_QUERY = \
+'''
+query product($productId: ID!) {
+    product(productId: $productId) {
+        id
+        title
+    }
+}
+'''
+
+CREATE_PRODUCT_MUTATION = \
+'''
+mutation createProduct($collectionId: ID!, $title: String!, $slug: String!, $inventory: Int!, $promotions: [Int!], $unitPrice: Decimal!){
+  createProduct(collectionId: $collectionId, slug: $slug, title: $title, inventory: $inventory, promotions: $promotions, unitPrice: $unitPrice) {
+    product {
+      id
+      title
+      unitPrice
+      collection {
+        id
+      }
+      promotions {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+}
+'''
+
+EDIT_PRODUCT_MUTATION = \
+'''
+mutation editProduct($productId: ID!, $collectionId: ID!, $title: String!, $slug: String!, $inventory: Int!, $promotions: [Int!], $unitPrice: Decimal!){
+  editProduct(productId: $productId, collectionId: $collectionId, slug: $slug, title: $title, inventory: $inventory, promotions: $promotions, unitPrice: $unitPrice) {
+    product {
+      id
+      title
+      unitPrice
+      collection {
+        id
+      }
+      promotions {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+}
+'''
+
+DELETE_PRODUCT_MUTATION = \
+'''
+mutation deleteProduct($productId: ID!){
+  deleteProduct(productId: $productId){
+    ok
+  }
+}
+'''
+
+DELETE_PRODUCT_PROMOTIONS_MUTATION = \
+'''
+mutation deleteProductPromotions($productId: ID!){
+  deleteProductPromotions(productId: $productId){
+    ok
+  }
+}
+'''

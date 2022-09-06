@@ -1,37 +1,8 @@
 import json
-from django.contrib.auth import get_user_model
 from graphene_django.utils.testing import GraphQLTestCase
-from store.models import Collection, Product
-from decimal import Decimal
+from store.models import Collection
 from .consts import *
-
-
-def create_user(username='test_user', password='test_user1234', is_staff=True):
-    return get_user_model().objects.create(
-        username=username, password=password, is_staff=is_staff)
-
-
-def create_collection(title='Test collection'):
-    collection = Collection.objects.create(
-        title='Test collection'
-    )
-
-    return collection
-
-
-def create_product(
-        title='test product', unit_price=Decimal(65.00),
-        inventory=40, collection=None, promotions=None):
-    collection = create_collection()
-
-    product = Product()
-    product.title = 'test product'
-    product.unit_price = Decimal(65.00)
-    product.inventory = 30
-    product.collection = collection
-    product.save()
-
-    return product
+from .utils import create_collection, create_product, create_user
 
 
 class PublicCollectionTests(GraphQLTestCase):
@@ -73,7 +44,8 @@ class PublicCollectionTests(GraphQLTestCase):
         resp = self.query(
             EDIT_COLLECTION_MUTATION,
             op_name='editCollection',
-            variables={'collectionId': collection.id, 'title': 'Test collection'}
+            variables={'collectionId': collection.id,
+                       'title': 'Test collection'}
         )
         content = json.loads(resp.content)
 
@@ -92,6 +64,7 @@ class PublicCollectionTests(GraphQLTestCase):
 
         self.assertEqual(content['errors'][0]['message'],
                          'You do not have permission to perform this action')
+
 
 class PrivateCollectionTests(GraphQLTestCase):
     """Tests collections for authenticated users."""
@@ -122,7 +95,8 @@ class PrivateCollectionTests(GraphQLTestCase):
         resp = self.query(
             EDIT_COLLECTION_MUTATION,
             op_name='editCollection',
-            variables={'collectionId': collection.id, 'title': 'Test collection'}
+            variables={'collectionId': collection.id,
+                       'title': 'Test collection'}
         )
         content = json.loads(resp.content)
 
