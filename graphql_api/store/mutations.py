@@ -3,7 +3,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import staff_member_required
 from django.db import transaction
 from store.models import Product, Collection, Promotion
-from .types import CollectionType, ProductType
+from .types import CollectionType, ProductType, PromotionType
 
 
 class CreateCollection(graphene.Mutation):
@@ -203,3 +203,66 @@ class DeleteProduct(graphene.Mutation):
             return DeleteProductPromotions(ok=True)
         except Product.DoesNotExist:
             raise GraphQLError("Product does not exist.")
+
+class CreatePromotion(graphene.Mutation):
+    """Mutation for create a promotion."""
+    class Arguments:
+        description = graphene.String(required=True)
+        discount = graphene.Float(required=True)
+
+    promotion = graphene.Field(PromotionType)
+
+    @classmethod
+    @staff_member_required
+    def mutate(cls, root, info, description, discount):
+        promotion = Promotion.objects.create(
+            description=description,
+            discount=discount
+        )
+
+        return CreatePromotion(promotion=promotion)
+
+class EditPromotion(graphene.Mutation):
+    """Mutation for create a promotion."""
+    class Arguments:
+        promotion_id = graphene.ID(required=True)
+        description = graphene.String()
+        discount = graphene.Float()
+
+    promotion = graphene.Field(PromotionType)
+
+    @classmethod
+    @staff_member_required
+    def mutate(cls, root, info, promotion_id, description=None, discount=None):
+        try:
+            promotion = Promotion.objects.get(pk=promotion_id)
+        except Promotion.DoesNotExist:
+            raise GraphQLError("Promotion dose not exist.")
+
+        if description:
+            promotion.description = description
+
+        if discount:
+            promotion.discount = discount
+
+        promotion.save()
+
+        return EditPromotion(promotion=promotion)
+
+
+class DeletePromotion(graphene.Mutation):
+    class Arguments:
+        promotion_id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    @staff_member_required
+    def mutate(cls, root, info, promotion_id, description=None, discount=None):
+        try:
+            promotion = Promotion.objects.get(pk=promotion_id)
+        except Promotion.DoesNotExist:
+            raise GraphQLError("Promotion dose not exist.")
+
+        promotion.delete()
+        return DeletePromotion(ok=True)

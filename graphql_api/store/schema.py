@@ -10,7 +10,8 @@ from .types import (CollectionType, ProductType, ReviewType,
 from .mutations import (
     CreateCollection, EditCollection, DeleteCollection,
     CreateProduct, EditProduct, DeleteProduct,
-    DeleteProductPromotions,
+    DeleteProductPromotions, CreatePromotion, EditPromotion,
+    DeletePromotion,
     )
 
 class CollectionQuery(graphene.ObjectType):
@@ -60,6 +61,12 @@ class PromotionQuery(graphene.ObjectType):
         except Promotion.DoesNotExist:
             raise GraphQLError(message='Promotion dose not exist.')
 
+class PromotionMutation(graphene.ObjectType):
+    """Mutating class for create, update and delete promotion."""
+
+    create_promotion = CreatePromotion.Field()
+    edit_promotion = EditPromotion.Field()
+    delete_promotion = DeletePromotion.Field()
 
 class ReviewQuery(graphene.ObjectType):
     """Query for retrieve review or reviews of product"""

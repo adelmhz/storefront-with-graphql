@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from store.models import Collection, Product, Promotion
 
+
 def create_user(username='test_user', password='test_user1234', is_staff=True):
     return get_user_model().objects.create(
         username=username, password=password, is_staff=is_staff)
@@ -28,6 +29,7 @@ def create_product(
     product.save()
 
     return product
+
 
 def create_promotion(description='Noruz', discount=20):
     return Promotion.objects.create(
