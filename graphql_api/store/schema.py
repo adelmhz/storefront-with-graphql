@@ -12,11 +12,13 @@ from .mutations import (
     CreateProduct, EditProduct, DeleteProduct,
     DeleteProductPromotions, CreatePromotion, EditPromotion,
     DeletePromotion,
-    )
+)
+
 
 class CollectionQuery(graphene.ObjectType):
     """Query to retrieve collections."""
     collections = DjangoFilterConnectionField(CollectionType)
+
 
 class CollectionMutation(graphene.ObjectType):
     """Mutation class for create, update and delete a collection"""
@@ -38,6 +40,7 @@ class ProductQuery(graphene.ObjectType):
         except Product.DoesNotExist:
             raise GraphQLError(message="Product does not exist.")
 
+
 class ProductMutation(graphene.ObjectType):
     """Mutating class for create, update, delete and promotions of product."""
     create_product = CreateProduct.Field()
@@ -54,12 +57,12 @@ class PromotionQuery(graphene.ObjectType):
         PromotionType, filterset_class=PromotionFilter
     )
 
-    @staff_member_required
     def resolve_promotion(root, info, promotion_id):
         try:
             return Promotion.objects.get(pk=promotion_id)
         except Promotion.DoesNotExist:
             raise GraphQLError(message='Promotion dose not exist.')
+
 
 class PromotionMutation(graphene.ObjectType):
     """Mutating class for create, update and delete promotion."""
@@ -67,6 +70,7 @@ class PromotionMutation(graphene.ObjectType):
     create_promotion = CreatePromotion.Field()
     edit_promotion = EditPromotion.Field()
     delete_promotion = DeletePromotion.Field()
+
 
 class ReviewQuery(graphene.ObjectType):
     """Query for retrieve review or reviews of product"""

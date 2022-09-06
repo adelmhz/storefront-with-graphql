@@ -140,3 +140,63 @@ mutation deleteProductPromotions($productId: ID!){
   }
 }
 '''
+
+ALL_PROMOTIONS_QUERY = \
+'''
+query allPromotions{
+  allPromotions {
+    edges {
+      node {
+        id
+        description
+        discount
+      }
+    }
+  }
+}
+'''
+
+PROMOTION_QUERY = \
+'''
+query promotion($promotionId: ID!) {
+  promotion(promotionId: $promotionId) {
+    id
+    description
+    discount
+  }
+}
+'''
+
+CREATE_PROMOTION_MUTATION = \
+'''
+mutation createPromotion($description: String!, $discount: Float!){
+  createPromotion(description: $description, discount: $discount){
+    promotion {
+      id
+      description
+      discount
+    }
+  }
+}
+'''
+
+UPDATE_PROMOTION_MUTATION = \
+'''
+mutation editPromotion($promotionId: ID!, $description: String, $discount: Float){
+  editPromotion(promotionId: $promotionId,description: $description, discount: $discount){
+    promotion {
+      id
+      description
+    }
+  }
+}
+'''
+
+DELETE_PROMOTION_MUTATION = \
+'''
+mutation deletePromotion($promotionId: ID!){
+  deletePromotion(promotionId: $promotionId){
+    ok
+  }
+}
+'''
