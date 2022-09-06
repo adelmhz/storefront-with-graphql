@@ -3,7 +3,7 @@ from graphene_django.utils.testing import GraphQLTestCase
 from graphql_relay import from_global_id
 from store.models import Product, Promotion
 from .consts import *
-from .utils import create_collection, create_product, create_promotion, create_user
+from graphql_api.utils import create_collection, create_product, create_promotion, create_user
 
 class PublicProductTest(GraphQLTestCase):
     """Test products for anonymouse users."""

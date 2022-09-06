@@ -4,7 +4,7 @@ from graphene_django.debug import DjangoDebug
 from .store.schema import (CollectionQuery, ProductQuery, ReviewQuery,
                           CartQuery, CollectionMutation, ProductMutation,
                           PromotionQuery, PromotionMutation)
-from .customer.schema import UserQuery
+from .customer.schema import UserQuery, UserMutation
 
 
 class Query(CollectionQuery, ProductQuery, ReviewQuery,
@@ -12,7 +12,10 @@ class Query(CollectionQuery, ProductQuery, ReviewQuery,
     debug = graphene.Field(DjangoDebug, name='_debug')
 
 
-class Mutation(CollectionMutation, ProductMutation, PromotionMutation):
+class Mutation(
+    CollectionMutation, ProductMutation,
+    PromotionMutation, UserMutation
+    ):
     token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()

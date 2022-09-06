@@ -2,7 +2,7 @@ import json
 from graphene_django.utils.testing import GraphQLTestCase
 from store.models import Collection
 from .consts import *
-from .utils import create_collection, create_product, create_user
+from graphql_api.utils import create_collection, create_product, create_user
 
 
 class PublicCollectionTests(GraphQLTestCase):

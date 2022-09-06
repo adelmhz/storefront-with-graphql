@@ -1,10 +1,9 @@
 import json
-from decimal import Decimal
 from graphene_django.utils.testing import GraphQLTestCase
 from graphql_relay import from_global_id
-from store.models import Collection, Product, Promotion
+from store.models import Promotion
 from .consts import *
-from .utils import create_collection, create_product, create_promotion, create_user
+from graphql_api.utils import create_promotion, create_user
 
 
 class PublicPromotionTest(GraphQLTestCase):
