@@ -7,6 +7,14 @@ def create_user(username='test_user', password='test_user1234', is_staff=True):
     return get_user_model().objects.create(
         username=username, password=password, is_staff=is_staff)
 
+def create_superuser():
+        """Create, save and return new superuser"""
+        user = create_user()
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+
+        return user
 
 def create_collection(title='Test collection'):
     collection = Collection.objects.create(
